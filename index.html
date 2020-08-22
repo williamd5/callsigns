@@ -27,6 +27,7 @@
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="BAW749" id="callsign">
           <div class="input-group-append">
+            <button class="btn btn-success" type="button" onclick="$('#callsign').val(genCallsign())">Generate</button>
             <button class="btn btn-primary" type="button" onclick="toCallsign()">Go</button>
           </div>
         </div>
@@ -63,11 +64,11 @@ function speak() {
   
 function toCallsign () {
   let input = $("#callsign").val().replace(" ", "").toUpperCase();
-  let callsign = input.split(/\d/)[0];
+  let callsign = input.substr(0, 3);
   let numbers = input.substr(callsign.length);
   let telephony = "";
   if (callsigns[callsign]) telephony = callsigns[callsign];
-  else for (let i in callsign) telephony += toPhonetic(callsign) + " ";
+  else for (let i in callsign) telephony += toPhonetic(callsign[i]) + " ";
   let phonetic = [];
   for (let i in numbers) phonetic.push(toPhonetic(numbers[i]));
   phonetic = phonetic.join(" ");
@@ -81,6 +82,24 @@ function toPhonetic (data) {
   data = data.toUpperCase();
   if (alphabet[data] !== undefined) return alphabet[data];
   return data;
+}
+  
+  function genCallsign () {
+    var designators = Object.keys(callsigns);
+    let designator = designators[Math.floor(Math.random() * designators.length)];
+
+    let numbers = '';
+    let characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+    let length = rand(1, 4);
+    for (let i = 0; i < length; ++i) numbers += characters[Math.floor(Math.random() * characters.length)];
+
+    return designator + numbers;
+}
+
+function rand(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 </script>
 </body>
