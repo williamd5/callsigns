@@ -65,7 +65,9 @@ function toCallsign () {
   let input = $("#callsign").val().replace(" ", "").toUpperCase();
   let callsign = input.split(/\d/)[0];
   let numbers = input.substr(callsign.length);
-  let telephony = callsigns[callsign];
+  let telephony;
+  if (callsigns[callsign]) callsigns[callsign];
+  else telephony = callsign;
   let phonetic = [];
   for (let i in numbers) phonetic.push(toPhonetic(numbers[i]));
   phonetic = phonetic.join(" ");
