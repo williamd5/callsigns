@@ -53,6 +53,8 @@ $(document).ready(function () {
     }
   });
 });
+  
+$("#callsign").on('input', toCallsign);
 
 function speak() {
   responsiveVoice.speak($(".lead .text").html(), "UK English Female", {rate: 1.2}); 
