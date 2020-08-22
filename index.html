@@ -38,8 +38,41 @@
   </div>
 </div>
 <script>
+let callsigns = {}, alphabet = {};
+$(document).ready(function () {
+  $.get({
+    url: "/callsigns/callsigns.json",
+    success: function (data) {
+      callsigns = data; 
+    }
+  });
+  $.get({
+    url: "/callsigns/alphabet.json",
+    success: function (data) {
+      alphabet = data; 
+    }
+  });
+});
+
 function speak() {
   responsiveVoice.speak($(".lead .text").html(), "UK English Female", {rate: 1.2}); 
+}
+  
+function toCallsign () {
+  let input = $("#callsign").val().replace(" ", "").toUpperCase();
+  let callsign = input.split(/\d/)[0];
+  let numbers = input.substr(callsign.length);
+  let telephony = callsigns[callsign];
+  let phonetic = "";
+  for (let i in numbers) phonetic += toPhonetic(numbers[i]);
+  $("h3").html(callsign + " " + numbers);
+  $(".lead .text").html(full);
+}
+  
+function toPhonetic (data) {
+  data = data.toUpperCase();
+  if (alphabet[data] !== undefined) return alphabet[data];
+  return data;
 }
 </script>
 </body>
