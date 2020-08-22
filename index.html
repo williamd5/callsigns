@@ -63,8 +63,11 @@ function toCallsign () {
   let callsign = input.split(/\d/)[0];
   let numbers = input.substr(callsign.length);
   let telephony = callsigns[callsign];
-  let phonetic = "";
-  for (let i in numbers) phonetic += toPhonetic(numbers[i]);
+  let phonetic = [];
+  for (let i in numbers) phonetic.push(toPhonetic(numbers[i]));
+  phonetic = phonetic.join(" ");
+  let full = telephony + " " + phonetic;
+  console.log(phonetic, full);
   $("h3").html(callsign + " " + numbers);
   $(".lead .text").html(full);
 }
