@@ -43,13 +43,13 @@
 let callsigns = {}, alphabet = {};
 $(document).ready(function () {
   $.get({
-    url: "/callsigns/callsigns.json",
+    url: "https://williamd5.github.io/callsigns/callsigns.json",
     success: function (data) {
       callsigns = data; 
     }
   });
   $.get({
-    url: "/callsigns/alphabet.json",
+    url: "https://williamd5.github.io/callsigns/alphabet.json",
     success: function (data) {
       alphabet = data; 
     }
@@ -72,7 +72,7 @@ function toCallsign () {
   let phonetic = [];
   for (let i in numbers) phonetic.push(toPhonetic(numbers[i]));
   phonetic = phonetic.join(" ");
-  let full = telephony + " " + phonetic;
+  let full = telephony.toUpperCase() + " " + phonetic;
   console.log(phonetic, full);
   $("h3").html(callsign + " " + numbers);
   $(".lead .text").html(full);
