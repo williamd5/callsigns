@@ -35,7 +35,8 @@
     </div>
     <div class="col-sm-8">
       <h3>BAW 749</h3>
-      <p class="lead"><span class="text align-middle">SPEEDBIRD SEVEN FOUR NINER</span><button class="btn btn-secondary btn-sm ml-3 align-middle" onclick="speak()"><i class="ci-pro ci-volume_up"></i></button></p>
+      <p class="lead mb-0"><span class="text align-middle">SPEEDBIRD SEVEN FOUR NINER</span></p>
+      <button class="btn btn-secondary btn-sm align-middle" onclick="speak()"><i class="ci-pro ci-volume_up"></i> Listen</button>    
     </div>
   </div>
   <textarea id="text" placeholder="Type any text here" class="form-control mb-2"></textarea>
@@ -59,12 +60,15 @@ $(document).ready(function () {
 });
   
 $("#callsign").on('input', toCallsign);
-
+let speakRate = 1.2; //used to toggle between fast and slow
 function speak() {
-  responsiveVoice.speak($(".lead .text").html(), "UK English Female", {rate: 1.2}); 
+  responsiveVoice.speak($(".lead .text").html(), "UK English Female", {rate: speakRate}); 
+  if (speakRate == 1.2) speakRate = .7;
+  else speakRate = 1.2;
 }
   
 function toCallsign () {
+  speakRate = 1.2; //reset speak rate
   let input = $("#callsign").val().replace(" ", "").toUpperCase();
   let callsign = input.substr(0, 3);
   let numbers = input.substr(callsign.length);
