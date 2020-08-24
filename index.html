@@ -27,7 +27,7 @@
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="BAW749" id="callsign">
           <div class="input-group-append">
-            <button class="btn btn-success" type="button" onclick="$('#callsign').val(genCallsign());toCallsign()">Generate</button>
+            <button class="btn btn-success" type="button" onclick="$('#callsign').val(genCallsign());toCallsign();">Generate</button>
             <button class="btn btn-primary" type="button" onclick="toCallsign()">Go</button>
           </div>
         </div>
@@ -36,7 +36,9 @@
     <div class="col-sm-8">
       <h3>BAW 749</h3>
       <p class="lead mb-0"><span class="text align-middle">SPEEDBIRD SEVEN FOUR NINER</span></p>
-      <button class="btn btn-secondary btn-sm align-middle" onclick="speak()"><i class="ci-pro ci-volume_up"></i> Listen</button>    
+      <button class="btn btn-secondary btn-sm align-middle" onclick="speak()"><i class="ci-pro ci-volume_up"></i> Callsign</button>
+      <button class="btn btn-primary btn-sm align-middle" onclick="speakAtc()"><i class="ci-pro ci-volume_up"></i> ATC</button>
+      <button class="btn btn-success btn-sm align-middle" onclick="speakPilot()"><i class="ci-pro ci-volume_up"></i> Pilot readback</button>
     </div>
   </div>
   <textarea id="text" placeholder="Type any text here" class="form-control mb-2"></textarea>
@@ -66,7 +68,9 @@ function speak() {
   if (speakRate == 1.2) speakRate = .7;
   else speakRate = 1.2;
 }
-  
+
+let instruction = "%s descend maintain niner thousand feet";
+let readback = "9000 for %s";
 function toCallsign () {
   speakRate = 1.2; //reset speak rate
   let input = $("#callsign").val().replace(" ", "").toUpperCase();
@@ -82,6 +86,8 @@ function toCallsign () {
   console.log(phonetic, full);
   $("h3").html(callsign + " " + numbers);
   $(".lead .text").html(full);
+  
+  genInstructions();
 }
   
 function toPhonetic (data) {
@@ -114,6 +120,30 @@ function speakText() {
     for (let i in input) text.push(toPhonetic(input[i]));
     text = text.join(" ");
     responsiveVoice.speak(text, "UK English Female");
+}
+
+function speakAtc() {
+	let text = instruction.replace("%s", $(".lead .text").text());
+    responsiveVoice.speak(text, "UK English Female", {rate:1.2});
+}
+
+
+function speakPilot() {
+	let text = readback.replace("%s", $(".lead .text").text());
+    responsiveVoice.speak(text, "UK English Male", {rate:1.2});
+}
+
+function genInstructions() {
+	const atc = ["%s climb maintain 4000 feet", "%s turn left heading 2 8 zero", "%s descend 4000, expect 3000", "%s reduce speed 1 80", "%s radio contact, proceed direct lambourne", "%s cleared ILS approach runway two seven right", "%s, cleared to land, runway two seven left, wind is 2 eight zero at 7", "%s left when able, taxi to gate via alpha, tango romeo, tango 2", "%s cross runway 3 1 left, hold short taxiway bravo", "%s cleared for takeoff runway zero niner center, wind is calm", "%s go around runway not clear", "%s follow company is a triple 7", "%s what's the word", "%s heavy left on hotel left on 4 left, you're in sequence behind the competition ahead. The tower 23 9", "okay %s, what you can do is when british airways gets in front of you on the runway, get down to golf", "%s, new plan, wait for KLM", "%s taxi to the ramp", "%s super, continue on the runway to foxtrot", "%s heavy, kennedy ground, runway 3 1 right shortened, left bravo, at hotel-bravo, follow EL-AL", "%s, final approach 32 4, good day", "%s, new york, who told you that you could have the right side?", "%s maintain 3000", "%s heading 2 4 zero to intercept 2 2 left, maintain 2000", "%s heavy, this next guy is the one that does the terrible texas accent. You can call him on 32 4. See ya!", "%s heavy, heathrow approach, good afternoon", "%s maintain 4000", "%s Stay with me. You don't want to talk to him. He's cranky this morning", "%s super, verify ATIS Golf", "descend and maintain niner thousand %s super", "%s descend and maintain 5000, fly heading 2 3 zero", "And %s, how much time in fuel do you have before you have to divert?", "%s heavy, turn right direct heading 3 1 zero", "radio check, radio check", "juliana tower is now active, all aircraft operating within the airspace contact me before making any moves.", "%s go ahead and taxi your own discretion to the runway", "%s maintain 5000", "%s cleared to london city airport and maintain 3000 expect your requested altitude 1 zero minutes after departure. departure frequency is 2 niner 4 squawk 4 zero 6 zero"];
+    
+    const pilot = ["maintain 4000 for %s", "left 2 8 zero, %s", "4000 %s", "speed 1 80 for %s", "direct lambourne for %s", "two seven right and cleared ILS for %s", "cleared to land two seven left, %s", "left when able, alpha, tango romeo, tango 2, for %s", "cross 3 1 left hold bravo, %s", "clear for departure siro nine centre, %s", "going around %s", "follow company %s", "err we just had a... last word was about 5 minutes... then moving, but I will keep you informed %s", "left and left on to 4 left, %s heavy", "follow british airways to golf, %s", "wait for KLM, %s", "taxi to the ramp, %s, thank you", "to the runway... on the runway to foxtrot, %s super", "left bravo, at hotel-bravo follow el-al %s", "32 4, you have a good day %s", "Uh.. the last guy", "descend and maintain 3000, %s", "2 4 zero intercept 2 2 left, %s", "oh, I'm afraid... okay, 32 4, we'll talk to you later", "haha, how you doin?", "maintain 4000 %s. you from london?", "Okay, we'll stay with you then. Give him more coffee!", "%s, we have golf, and for your information we are unable to take runway 2 2, we are too heavy. we need runway zero 4 or 1 3", "%s super descending 9000, thanks for your help", "%s descending 5000 feet, heading 2 3 zero", "%s we have 30 minutes. %s, 3 zero minutes until we have to divert", "%s, right turn 3 4 zero", "5 by 5", "roger that, %s", "taxi own discretion, %s", "%s can't we stay on 6000? Oh, nevermind, descending 5000", "3000, expect 10000 1 zero minutes after departure 2 niner 4 is the departure and 4 zero 6 zero in the box for %s"];
+    let r = randomArray(atc);
+    instruction = atc[r];
+    readback = pilot[r];
+}
+
+function randomArray (items) {
+	return Math.floor(Math.random() * items.length);
 }
 </script>
 </body>
